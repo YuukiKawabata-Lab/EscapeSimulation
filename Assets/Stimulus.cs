@@ -15,7 +15,7 @@ namespace stimulus
         float delta_Speed;
         public float TerminalPoint;
         public float TerminalPointEdge;
-        int addMoveFrames = 0;
+        int addMoveFrames = -1;//0;
         readonly float TargetPoint_Xaxis;
         float Target_Frame; // Frame at which stimulus movement ends
         public bool NotFinishedSimulation = true;
@@ -38,10 +38,10 @@ namespace stimulus
 
 
         //A predicted crickets' TL is 2.45 cm. A mean flogs' target point is 0.14 TL. 
-        public Stimulus(string stimulus = "stimulus_c",float StimulusSpeed = -1f, float CamFps = 200f, float TargetPointX_Axis = 2.45f * 0.142f, float FlogTongueWidth = 0.578f)
+        public Stimulus(string stimulus = "stimulus_c",float StimulusSpeed = -1f, float CamFps = 200f, float TargetPointX_Axis = 0f, float FlogTongueWidth = 2.205f)  //float FlogTongueWidth = 0.578f, TargetPointX_Axis = 2.45f * 0.142f
         {
             this.StimulusObj = GameObject.Find(stimulus);
-            this.FlogTongScaleX = this.FlogTongScaleY = this.FLOG_TONGUE_WIDTH = FlogTongueWidth;
+            this.FlogTongScaleX = this.FlogTongScaleY = this.FLOG_TONGUE_WIDTH = FlogTongueWidth / 8;
             this.STIMULUS_SCALE_X = this.StimulusObj.GetComponent<Transform>().localScale.x;
             this.STIMULUS_SCALE_Y = this.StimulusObj.GetComponent<Transform>().localScale.y;
 
@@ -83,7 +83,7 @@ namespace stimulus
                 FidFrame = calcStartFrame((float)FID);
             }
             this.FidDistance = FidFrame * this.MovingDistancePerFrame;
-            this.StartStimulusPosition_X = ((FidDistance * -1) - this.FlogTongScaleX/2) - this.TargetPoint_Xaxis;
+            this.StartStimulusPosition_X = ((FidDistance * -1) - this.FlogTongScaleX / 2) - this.TargetPoint_Xaxis;
 
             StimulusObj.transform.position = new Vector3(this.StartStimulusPosition_X, 0f, 0f);
             StimulusObj.transform.localScale = new Vector3
@@ -127,29 +127,27 @@ namespace stimulus
 
         public void SetNextItr()
         {
-            // Extend the stimulus endpoint (extend by 0.90 cm (2 frames) twice)
-            if (this.addMoveFrames <= 4)
+            // Extend the stimulus endpoint (extend by 0.90 cm (1 frames) twice)
+            if (this.addMoveFrames < 6)
             {
-                this.addMoveFrames += 2;
+                this.addMoveFrames += 1;
             }
-            if (this.addMoveFrames > 4)
+            else
             {
-                this.addMoveFrames = 0;
-                this.FlogTongScaleX += 1f;
-            }
-            if (this.FlogTongScaleX > 1f) // Set to 1 or greater to maintain stimulus size
-            {
-                this.FlogTongScaleX = this.FLOG_TONGUE_WIDTH;
-                this.FlogTongScaleY += 1f;
-            }
-            if (this.FlogTongScaleY > 1f) // Set to 1 or greater to maintain stimulus size
-            {
-                this.FlogTongScaleY = this.FLOG_TONGUE_WIDTH;
-                this.ItrStartPosition += this.MovingDistancePerFrame * 4f; // *3f;
-            }
-            if (this.ItrStartPosition > 10f) // FID starts from 0.45cm*5 and increases to 0.45cm*8, 0.45cm*11
-            {
-                this.NotFinishedSimulation = false;
+                this.addMoveFrames = -1; //0; 
+                this.FlogTongScaleX *= 2f;
+                this.FlogTongScaleY *= 2f;
+
+                if (this.FlogTongScaleX > this.FLOG_TONGUE_WIDTH * Math.Pow(2f, 5f))
+                {
+                    this.FlogTongScaleX = this.FLOG_TONGUE_WIDTH;
+                    this.FlogTongScaleY = this.FLOG_TONGUE_WIDTH;
+                    this.ItrStartPosition += this.MovingDistancePerFrame * 3f;
+                    if (this.ItrStartPosition > 8f) // FID starts from 0.45cm*5 and increases to 0.45cm*8, 0.45cm*11, 0.45cm*14, 0.45cm*17
+                    {
+                        this.NotFinishedSimulation = false;
+                    }
+                }
             }
 
             this.TerminalPoint = this.calcTermianlPoint();
@@ -172,6 +170,7 @@ namespace stimulus
         float calcTermianlPoint()
         {
             return this.MovingDistancePerFrame * this.addMoveFrames - this.TargetPoint_Xaxis - this.FlogTongScaleX / 2;
+            //return this.MovingDistancePerFrame * this.addMoveFrames - this.FlogTongScaleX / 2;
             //return this.MovingDistancePerFrame * this.addMoveFrames - this.TargetPoint_Xaxis - this.StimulusCenter2EdgeLength;
         }
         float calcTermianlPointEdge()

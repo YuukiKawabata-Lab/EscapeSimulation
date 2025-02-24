@@ -1,3 +1,4 @@
+using Ookii.Dialogs;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,8 +19,9 @@ public class ExitDangerArea : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        MainScene.dangerArea.UpdateState("Out");
-        Debug.Log("Exit: " + other.gameObject.tag);
+            MainScene.dangerArea.UpdateStateCircleOut();
+            MainScene.dangerArea.UpdateState2Out();
+            Debug.Log("Exit: " + other.gameObject.tag);
     }
 
 }

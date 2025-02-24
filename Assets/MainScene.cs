@@ -18,11 +18,11 @@ public class MainScene : MonoBehaviour
     int k = 0; // Sequential number for analysis
     public bool NotFinish = true; // Not finished reading all files
     public string state = "NotCaught";
-    bool StimulusMoving = true;
+    public static bool StimulusMoving;
     int loop;
     List<List<float>> df;
     int df_length;
-    bool FlagMoving = true;
+    public static bool PreyMoving;
 
     GameObject MainMenu;
     CricketObj cricket;
@@ -32,7 +32,7 @@ public class MainScene : MonoBehaviour
     FileReadWrite methods;
     public static StatusDangerArea dangerArea;
     int? ExitDangerFrame = null;
-    bool session_continued = true;
+    //bool session_continued = true;
 
     // Environment settings
     Encoding enc = Encoding.GetEncoding("UTF-8"); // Specify encoding
@@ -67,11 +67,12 @@ public class MainScene : MonoBehaviour
                 df = FileIO.ReadCSV(FileIO.ImportCSVList[i]);
                 Debug.Log("Enter file:" + FileIO.ImportCSVList[i]);
                 df_length = df[1].Count() - 1;
-                FlagMoving = true;
+                PreyMoving = true;
+                StimulusMoving = true;
             }
 
             // Move a cricket and a frog
-            if (j <= df_length || StimulusMoving)
+            if (j < df_length || StimulusMoving)
             {
                 Debug.Log("StimulusMoving ("+ StimulusMoving +") is True");
 
@@ -83,6 +84,10 @@ public class MainScene : MonoBehaviour
                 {
                     cricket.CriketMoving(j, df);
                 }
+                else
+                {
+                    PreyMoving = false;
+                }
                 //Move a flog
                 StimulusMoving = stimulus.StimulusMoving();
                 if (dangerArea.State == "Out" && this.ExitDangerFrame is null)
@@ -91,7 +96,7 @@ public class MainScene : MonoBehaviour
                     Debug.Log("Exit: Frame " + j);
                 }
  
-                Debug.Log(state + " " + j + " / " + df_length);
+                Debug.Log(state + " " + j + " / " + df_length + ": FID " + stimulus.FidDistance + ": Scale " + stimulus.FlogTongScaleX + ": TerminalPoint " + stimulus.TerminalPointEdge + ": TerminalPointDenger " + dangerArea.GetScale() + ": File " + FileIO.GetFilename(FileIO.ImportCSVList[i]) + ": Section " + FileIO.GetSectionname(FileIO.ImportCSVList[i]));
                 j++;
 
             }
@@ -144,6 +149,8 @@ public class MainScene : MonoBehaviour
                     csvsave.Scale_x.AddArrayElement(stimulus.FlogTongScaleX.ToString());
                     // EndPoint setting
                     csvsave.EndPoint.AddArrayElement(stimulus.TerminalPoint.ToString());
+                    // TerminalPointsetting
+                    csvsave.TerminalPoint.AddArrayElement(stimulus.TerminalPointEdge.ToString());
                     // Frame at which the danger area was exited
                     csvsave.ExitDangerAreaFrame.AddArrayElement(this.ExitDangerFrame.ToString());
 
@@ -153,17 +160,17 @@ public class MainScene : MonoBehaviour
                     if (i >= FileIO.ImportCSVList.Length)
                     {
                         i = 0;
-                        // Extend the stimulus endpoint (extend by 9 twice)
+                        // Change the stimulus endpoint, size and FID
                         stimulus.SetNextItr();
                     }
                     stimulus.SetStartPosition();
-                    StimulusMoving = true;
+                    //this.StimulusMoving = true;
                     // Reset cricket position
                     cricket.ResetCricket();
                     // Reset danger area information
-                    dangerArea.UpdateState("IN");
+                    dangerArea.UpdateState2In();
                     dangerArea.UpdateTransform(stimulus.TerminalPoint, 0f, stimulus.FlogTongScaleX, stimulus.StartStimulusPosition_X);
-                    session_continued = true;
+                    //session_continued = true;
                     this.ExitDangerFrame = null;
                     j = 0; // Reset line number
                 }

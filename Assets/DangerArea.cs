@@ -18,6 +18,8 @@ namespace DangerArea
 		float AreaSize;
 		float StimulusPosition;
 		public string State;
+        public bool State_Circle_in;
+        public bool State_Squre_in;
 
         public StatusDangerArea()
         {
@@ -53,6 +55,39 @@ namespace DangerArea
 			this.State = state;
 			this.DangerAreaState.GetComponent<Text>().text = this.State;
 			return;
+        }
+
+        public void UpdateState2In()
+        {
+            this.UpdateState("IN");
+            this.State_Circle_in = true;
+            this.State_Squre_in = true;
+        }
+
+        public void UpdateStateCircleOut()
+        {
+            this.State_Circle_in = false;
+        }
+        public void UpdateStateSqureOut()
+        {
+            this.State_Squre_in = false;
+        }
+
+        public void UpdateState2Out()
+        {
+            if(!(this.State_Circle_in || this.State_Squre_in))
+            {
+                this.UpdateState("Out");
+            }
+            else
+            {
+                this.UpdateState("IN");
+            }
+        }
+
+        public float GetScale()
+        {
+            return (this.AreaSize * this.DANGER_SCALE_X);
         }
     }
 }
