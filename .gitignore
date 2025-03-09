@@ -38,3 +38,12 @@ sysinfo.txt
  
 # Crashlytics generated file
 Assets/StreamingAssets/crashlytics-build.properties
+
+# Ignore all meta files
+*.meta
+
+# Ignore all .meta files in the Assets directory
+Assets/*.meta
+
+# Ignore all logs
+Logs/*
