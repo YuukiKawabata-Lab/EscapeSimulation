@@ -100,7 +100,8 @@ namespace stimulus
             this.StimulusPosition = StimulusObj.GetComponent<Transform>().position.x;
             bool output_IsMoving;
             var NextPosition = this.StimulusPosition + this.MovingDistancePerFrame;
-            bool IsMoving = Math.Round(this.TerminalPoint,3) >= Math.Round(NextPosition,3);
+            // 微小な誤差を考慮した比較を行う
+            bool IsMoving = (this.TerminalPoint - NextPosition) > -0.0001f;
             if (IsMoving)
             {
                 this.StimulusPosition = NextPosition;
