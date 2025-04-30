@@ -93,7 +93,7 @@ public class MainScene : MonoBehaviour
                 if (dangerArea.State == "Out" && this.ExitDangerFrame is null)
                 {
                     this.ExitDangerFrame = j;
-                    Debug.Log("Exit: Frame " + j);
+                    Debug.Log($"Exit: Frame {j}, DangerArea State: {dangerArea.State}, Cricket Position: {cricket.Cricket.transform.position}");
                 }
  
                 Debug.Log(state + " " + j + " / " + df_length + ": FID " + stimulus.FidDistance + ": Scale " + stimulus.FlogTongScaleX + ": TerminalPoint " + stimulus.TerminalPointEdge + ": TerminalPointDenger " + dangerArea.GetScale() + ": File " + FileIO.GetFilename(FileIO.ImportCSVList[i]) + ": Section " + FileIO.GetSectionname(FileIO.ImportCSVList[i]));
@@ -193,6 +193,12 @@ public class MainScene : MonoBehaviour
             Color32 rgbcol = StimulusObj_.GetComponent<SpriteRenderer>().color;
 
             Debug.Log("Enter: " + other.gameObject.tag + "; Stimulus:" +StimulusMoving + "; Color:" + rgbcol.g);
+            // 一度脱出した後は捕獲判定を行わない
+            if (this.ExitDangerFrame != null)
+            {
+                Debug.Log("Already escaped from danger area, ignoring re-entry");
+                return;
+            }
             if (StimulusMoving && rgbcol.g == 0)
             {
                 state = "Caught";

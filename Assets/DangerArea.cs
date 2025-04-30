@@ -75,6 +75,7 @@ namespace DangerArea
 
         public void UpdateState2Out()
         {
+            Debug.Log($"Before UpdateState2Out: Circle_in={State_Circle_in}, Squre_in={State_Squre_in}");
             if(!(this.State_Circle_in || this.State_Squre_in))
             {
                 this.UpdateState("Out");
@@ -83,6 +84,7 @@ namespace DangerArea
             {
                 this.UpdateState("IN");
             }
+            Debug.Log($"After UpdateState2Out: State={State}, Circle_in={State_Circle_in}, Squre_in={State_Squre_in}");
         }
 
         public float GetScale()

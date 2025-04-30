@@ -16,13 +16,11 @@ public class ExitDangerRoad : MonoBehaviour
         
     }
 
-    void OnTriggerExit2D(Collision2D other)
+    void OnTriggerExit2D(Collider2D other)
     {
-        //if(MainScene.dangerArea.State == "Out")
-        //{
-        //    MainScene.dangerArea.UpdateState("IN");
-        //}
+        Debug.Log($"Before Road Exit: DangerArea State: {MainScene.dangerArea.State}");
         MainScene.dangerArea.UpdateStateSqureOut();
         MainScene.dangerArea.UpdateState2Out();
+        Debug.Log($"After Road Exit: DangerArea State: {MainScene.dangerArea.State}, Object: {other.gameObject.tag}");
     }
 }

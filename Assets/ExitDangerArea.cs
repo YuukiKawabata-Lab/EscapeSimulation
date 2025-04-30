@@ -19,9 +19,10 @@ public class ExitDangerArea : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-            MainScene.dangerArea.UpdateStateCircleOut();
-            MainScene.dangerArea.UpdateState2Out();
-            Debug.Log("Exit: " + other.gameObject.tag);
+        Debug.Log($"Before Exit: DangerArea State: {MainScene.dangerArea.State}");
+        MainScene.dangerArea.UpdateStateCircleOut();
+        MainScene.dangerArea.UpdateState2Out();
+        Debug.Log($"After Exit: DangerArea State: {MainScene.dangerArea.State}, Object: {other.gameObject.tag}");
     }
 
 }
