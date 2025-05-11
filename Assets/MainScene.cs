@@ -154,6 +154,9 @@ public class MainScene : MonoBehaviour
                     // Frame at which the danger area was exited
                     csvsave.ExitDangerAreaFrame.AddArrayElement(this.ExitDangerFrame.ToString());
 
+                    // 各シミュレーション終了時にCSVファイルを保存
+                    csvsave.SaveFile(FileIO.SaveDataPath);
+
                     i++;
                     k++;
                     // End analysis when all data has been read
@@ -179,8 +182,7 @@ public class MainScene : MonoBehaviour
         }
         else
         {
-            Debug.Log(csvsave.result.GetArrayElement(i)+" "+csvsave.result.GetArray().Length);
-            csvsave.SaveFile(FileIO.SaveDataPath);
+            Debug.Log("All simulations completed");
         }
         
     }
