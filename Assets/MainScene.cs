@@ -111,48 +111,39 @@ public class MainScene : MonoBehaviour
 
                     if (state == "Caught")
                     {
-                        if (StimulusMoving)
-                        {
-                            csvsave.result.AddArrayElement("Caught_Error");
-                        }
-                        else
-                        {
-                            csvsave.result.AddArrayElement("Caught");
-                        }
+                        string result = StimulusMoving ? "Caught_Error" : "Caught";
+                        csvsave.SetResult(
+                            FileIO.GetFilename(FileIO.ImportCSVList[i]),
+                            FileIO.GetSectionname(FileIO.ImportCSVList[i]),
+                            result,
+                            j.ToString(),
+                            stimulus.FidDistance.ToString(),
+                            stimulus.FlogTongScaleX.ToString(),
+                            stimulus.FlogTongScaleY.ToString(),
+                            stimulus.TerminalPoint.ToString(),
+                            stimulus.TerminalPointEdge.ToString(),
+                            this.ExitDangerFrame.ToString()
+                        );
                         Debug.Log("Catch!");
                     }
                     if (state == "NotCaught")
                     {
-                        if (StimulusMoving)
-                        {
-                            csvsave.result.AddArrayElement("NotCaught_Error");
-                        }
-                        else
-                        {
-                            csvsave.result.AddArrayElement("NotCaught");
-                        }
+                        string result = StimulusMoving ? "NotCaught_Error" : "NotCaught";
+                        csvsave.SetResult(
+                            FileIO.GetFilename(FileIO.ImportCSVList[i]),
+                            FileIO.GetSectionname(FileIO.ImportCSVList[i]),
+                            result,
+                            j.ToString(),
+                            stimulus.FidDistance.ToString(),
+                            stimulus.FlogTongScaleX.ToString(),
+                            stimulus.FlogTongScaleY.ToString(),
+                            stimulus.TerminalPoint.ToString(),
+                            stimulus.TerminalPointEdge.ToString(),
+                            this.ExitDangerFrame.ToString()
+                        );
                         Debug.Log("Escaped!");
                     }
                     state = "NotCaught";
-
-                    // File name
-                    csvsave.file_end.AddArrayElement(FileIO.GetFilename(FileIO.ImportCSVList[i]));
-                    // Section name
-                    csvsave.file_section.AddArrayElement(FileIO.GetSectionname(FileIO.ImportCSVList[i]));
-                    // Frame at which predation occurred
-                    csvsave.result_flame.AddArrayElement(j.ToString());
-                    // FID setting
-                    csvsave.Fid_setting.AddArrayElement(stimulus.FidDistance.ToString());
-                    // Scale_Y setting
-                    csvsave.Scale_y.AddArrayElement(stimulus.FlogTongScaleY.ToString());
-                    // Scale_X setting
-                    csvsave.Scale_x.AddArrayElement(stimulus.FlogTongScaleX.ToString());
-                    // EndPoint setting
-                    csvsave.EndPoint.AddArrayElement(stimulus.TerminalPoint.ToString());
-                    // TerminalPointsetting
-                    csvsave.TerminalPoint.AddArrayElement(stimulus.TerminalPointEdge.ToString());
-                    // Frame at which the danger area was exited
-                    csvsave.ExitDangerAreaFrame.AddArrayElement(this.ExitDangerFrame.ToString());
 
                     // 各シミュレーション終了時にCSVファイルを保存
                     csvsave.SaveFile(FileIO.SaveDataPath);
@@ -167,13 +158,11 @@ public class MainScene : MonoBehaviour
                         stimulus.SetNextItr();
                     }
                     stimulus.SetStartPosition();
-                    //this.StimulusMoving = true;
                     // Reset cricket position
                     cricket.ResetCricket();
                     // Reset danger area information
                     dangerArea.UpdateState2In();
                     dangerArea.UpdateTransform(stimulus.TerminalPoint, 0f, stimulus.FlogTongScaleX, stimulus.StartStimulusPosition_X);
-                    //session_continued = true;
                     this.ExitDangerFrame = null;
                     j = 0; // Reset line number
                 }

@@ -8,30 +8,36 @@ namespace CsvSave
 {
     public class csvsaver
     {
-        public VariableArray file_end;
-        public VariableArray file_section;
-        public VariableArray result;
-        public VariableArray result_flame;
-        public VariableArray Fid_setting;
-        public VariableArray Scale_x;
-        public VariableArray Scale_y;
-        public VariableArray EndPoint;
-        public VariableArray TerminalPoint;
-        public VariableArray ExitDangerAreaFrame;
+        private string file_end;
+        private string file_section;
+        private string result;
+        private string result_flame;
+        private string Fid_setting;
+        private string Scale_x;
+        private string Scale_y;
+        private string EndPoint;
+        private string TerminalPoint;
+        private string ExitDangerAreaFrame;
+        private bool isFirstWrite = true;
 
         public csvsaver()
         {
-            file_end = new VariableArray();
-            file_section = new VariableArray();
-            result = new VariableArray();
-            result_flame = new VariableArray();
-            Fid_setting = new VariableArray();
-            Scale_x = new VariableArray();
-            Scale_y = new VariableArray();
-            EndPoint = new VariableArray();
-            TerminalPoint = new VariableArray();
-            ExitDangerAreaFrame = new VariableArray();
             return;
+        }
+
+        public void SetResult(string fileEnd, string fileSection, string result, string resultFlame, 
+            string fidSetting, string scaleX, string scaleY, string endPoint, string terminalPoint, string exitDangerFrame)
+        {
+            this.file_end = fileEnd;
+            this.file_section = fileSection;
+            this.result = result;
+            this.result_flame = resultFlame;
+            this.Fid_setting = fidSetting;
+            this.Scale_x = scaleX;
+            this.Scale_y = scaleY;
+            this.EndPoint = endPoint;
+            this.TerminalPoint = terminalPoint;
+            this.ExitDangerAreaFrame = exitDangerFrame;
         }
 
         // Write results to CSV file
@@ -40,23 +46,23 @@ namespace CsvSave
             try
             {
                 // Generate CSV file for data storage
-                using (var save = new StreamWriter(SaveDataPath, false, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true)))
+                using (var save = new StreamWriter(SaveDataPath, !isFirstWrite, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true)))
                 {
-                    // Generate header
-                    save.WriteLine("File Name, Section, Result, Result_frame, FID, ScaleY, ScaleX, EndPoint, TerminalPoint, ExitDangerFrame,");
-                    // Read cricket data sequentially
-                    for (int i = 0; i < this.result.GetArray().Length - 1; i++)
+                    // Generate header only on first write
+                    if (isFirstWrite)
                     {
-                        // Add file name to CSV
-                        save.WriteLine
-                        (
-                            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
-                            this.file_end.GetArrayElement(i + 1), this.file_section.GetArrayElement(i + 1), this.result.GetArrayElement(i + 1),
-                            this.result_flame.GetArrayElement(i + 1), this.Fid_setting.GetArrayElement(i + 1), this.Scale_y.GetArrayElement(i + 1),
-                            this.Scale_x.GetArrayElement(i + 1), this.EndPoint.GetArrayElement(i + 1), this.TerminalPoint.GetArrayElement(i + 1), 
-                            this.ExitDangerAreaFrame.GetArrayElement(i + 1)
-                        );
+                        save.WriteLine("File Name, Section, Result, Result_frame, FID, ScaleY, ScaleX, EndPoint, TerminalPoint, ExitDangerFrame,");
+                        isFirstWrite = false;
                     }
+
+                    // Write current iteration result
+                    save.WriteLine(
+                        "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
+                        this.file_end, this.file_section, this.result,
+                        this.result_flame, this.Fid_setting, this.Scale_y,
+                        this.Scale_x, this.EndPoint, this.TerminalPoint, 
+                        this.ExitDangerAreaFrame
+                    );
                     save.Close();
                 }
             }

@@ -41,7 +41,7 @@ namespace stimulus
         public Stimulus(string stimulus = "stimulus_c",float StimulusSpeed = -1f, float CamFps = 200f, float TargetPointX_Axis = 0f, float FlogTongueWidth = 2.205f)  //float FlogTongueWidth = 0.578f, TargetPointX_Axis = 2.45f * 0.142f
         {
             this.StimulusObj = GameObject.Find(stimulus);
-            this.FlogTongScaleX = this.FlogTongScaleY = this.FLOG_TONGUE_WIDTH = FlogTongueWidth / 8;
+            this.FlogTongScaleX = this.FlogTongScaleY = this.FLOG_TONGUE_WIDTH = FlogTongueWidth / 16;
             this.STIMULUS_SCALE_X = this.StimulusObj.GetComponent<Transform>().localScale.x;
             this.STIMULUS_SCALE_Y = this.StimulusObj.GetComponent<Transform>().localScale.y;
 
@@ -129,13 +129,13 @@ namespace stimulus
         public void SetNextItr()
         {
             // Extend the stimulus endpoint (extend by 0.90 cm (1 frames) twice)
-            if (this.addMoveFrames < 6)
+            if (this.addMoveFrames < 3)
             {
                 this.addMoveFrames += 1;
             }
             else
             {
-                this.addMoveFrames = -1; //0; 
+                this.addMoveFrames = -2; //0; 
                 this.FlogTongScaleX *= 2f;
                 this.FlogTongScaleY *= 2f;
 
