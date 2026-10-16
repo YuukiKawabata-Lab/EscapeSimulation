@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Security.Cryptography;
@@ -139,7 +139,7 @@ namespace stimulus
                 this.FlogTongScaleX *= 2f;
                 this.FlogTongScaleY *= 2f;
 
-                if (this.FlogTongScaleX > this.FLOG_TONGUE_WIDTH * Math.Pow(2f, 5f))
+                if (this.FlogTongScaleX >= this.FLOG_TONGUE_WIDTH * Math.Pow(2f, 5f))
                 {
                     this.FlogTongScaleX = this.FLOG_TONGUE_WIDTH;
                     this.FlogTongScaleY = this.FLOG_TONGUE_WIDTH;
