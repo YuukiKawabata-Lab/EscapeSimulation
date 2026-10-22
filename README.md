@@ -101,10 +101,10 @@ File Name, Section, Result, Result_frame, FID, ScaleY, ScaleX, EndPoint, Termina
 |--------|-------------|
 | `File Name` | Input trajectory CSV file name |
 | `Section` | Name of the folder containing the input file |
-| `Result` | `Caught` or `NotCaught`. `_Error` is appended (e.g., `Caught_Error`) when the stimulus was still moving at the end of the trajectory |
+| `Result` | `Caught` or `NotCaught`. Each trial continues until the stimulus has finished its strike, even if the trajectory data ends earlier; after the last row the cricket stays at its final position. A trial is therefore never recorded as `NotCaught` while the strike is still in progress. (The code contains an `_Error` suffix, e.g. `Caught_Error`, but it is never written under this rule.) |
 | `Result_frame` | Frame at which the trial ended |
 | `FID` | Flight initiation distance of the stimulus (cm) |
-| `ScaleY`, `ScaleX` | Tongue width. The tongue is square, so both values are equal |
+| `ScaleY`, `ScaleX` | Tongue width (diameter, cm). The capture area is a circle (`CircleCollider2D`) scaled equally in X and Y, so both values are equal |
 | `EndPoint` | Stimulus terminal point (center) |
 | `TerminalPoint` | Stimulus terminal point (edge) |
 | `ExitDangerFrame` | First frame at which the cricket left the danger area. Empty if it never left. Multiply by 5 to convert to ms |
