@@ -9,6 +9,8 @@ We used previously published datasets on wind-evoked escape behaviors of cricket
 Fukutomi, M. and Ogawa, H (2017). Crickets alter wind-elicited escape strategies depending on acoustic context. Scientific Reports, 7: 15158.
 https://doi.org/10.1038/s41598-017-15276-x
 
+The data actually used as input for the simulation is included in this repository under `data/Initial Response/`.
+
 ## Prerequisites
 
 - Windows (file paths are parsed with `\` as the separator)
@@ -34,7 +36,7 @@ Follow these steps to use the simulation:
 2. Press the Play button in the Unity Editor to run the simulation.
 3. Enter the stimulus (frog tongue) speed in cm/s in the "Stimulus Speed (cm/s)" field. The default is 90.
 4. Click the "Start Analysis" button to begin the simulation.
-5. When prompted, select the top data folder you want to analyze (see [Data Folder Structure](#data-folder-structure)).
+5. When prompted, select the top data folder you want to analyze (see [Data Folder Structure](#data-folder-structure)). To use the included data, select `data/Initial Response`.
 6. When prompted, specify the name of the CSV file where you want to save the results. The default name is `<yyyyMMddHHmmss>OutPutData`.
 7. The simulation runs every combination of stimulus conditions for each trajectory CSV file and appends one row per combination to the result file.
 8. Once all conditions have been simulated, the simulation stops. Press the `Q` key to stop the simulation early. Rows written before stopping are kept.
@@ -70,6 +72,15 @@ Top folder
 ```
 
 All `*.csv` files under the top folder are read, including those in nested subfolders. The name of the folder that directly contains each CSV file is written to the `Section` column of the result file.
+
+The included data under `data/Initial Response/` follows this structure, and can be selected directly as the top folder in step 5 of [Usage](#usage):
+
+```
+data/Initial Response
+├── 5-kHz tone/     (299 CSV files)
+├── 15-kHz tone/    (250 CSV files)
+└── Tone-free/      (299 CSV files)
+```
 
 ## Input CSV File Format
 
